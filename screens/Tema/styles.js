@@ -42,6 +42,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,   
     fontSize: 16,            
   },
+  listaTemas:{
+    width:"100%",
+    
+  }
 });
 
 export default styles;

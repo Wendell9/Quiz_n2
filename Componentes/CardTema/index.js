@@ -2,6 +2,7 @@ import {
     Text, TouchableOpacity, View
 } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Entypo from '@expo/vector-icons/Entypo'; 
 import styles from './styles';
 
 export default function CardTema({ tema, removerElemento, editar }) {

@@ -94,10 +94,10 @@ export default function TemaScreen() {
     <TouchableOpacity style={styles.botao} onPress={() => salvarTema()}>
           <Text style={styles.textoBotao}>Adicionar Tema</Text>
     </TouchableOpacity>
-      <ScrollView style={styles.listaTemas}>
+      <ScrollView contentContainerStyle={styles.listaTemas}>
         {
           temas.map((tema, index) => (
-            <CardTema cardTema={tema} key={index.toString()}
+            <CardTema tema={tema} key={index.toString()}
             removerElemento={removerElemento} editar={editar}
               />
           ))

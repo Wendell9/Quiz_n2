@@ -1,11 +1,8 @@
-import {
-    StyleSheet, Text, TouchableOpacity, View
-} from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Entypo from '@expo/vector-icons/Entypo';
+import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     card: {
+        width:"80%",
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -24,10 +21,11 @@ export const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#333',
-        flex: 1, // Permite que o texto se expanda e ocupe o espaço disponível
     },
     dadosBotoesAcao: {
         flexDirection: 'row',
         gap: 15, // Adiciona espaço entre os botões de ação
     },
 });
+
+export default styles;

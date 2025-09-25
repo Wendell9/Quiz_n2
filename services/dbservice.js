@@ -51,7 +51,7 @@ export async function obtemTodosOsTemas() {
     for (const registro of temas) {        
         let obj = {
             id: registro.id,
-            nome: registro.nome,        
+            nome: registro.nome_tema,        
         }
         retorno.push(obj);
     }
