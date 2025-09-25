@@ -63,9 +63,27 @@ export async function obtemTodosOsTemas() {
 };
 
 export async function adicionaTema(tema) {    
+    console.log("Inserindo o tema");
+    console.log(tema);
     let dbCx = await getDbConnection();    
     let query = 'insert into temas (nome_tema) values (?)';
     const result = await dbCx.runAsync(query, [tema.nome]);    
     await dbCx.closeAsync() ;    
     return result.changes == 1;    
+};
+
+export async function excluiTema(id) {
+    let dbCx = await getDbConnection();
+    let query = 'delete from temas where id=?';
+    const result = await dbCx.runAsync(query, id);
+    await dbCx.closeAsync() ;
+    return result.changes == 1;    
+};
+
+export async function alteraTema(tema) {
+    let dbCx = await getDbConnection();
+    let query = 'update temas set nome_tema=? where id=?';
+    const result = await dbCx.runAsync(query, [tema.nome,tema.id]);
+    await dbCx.closeAsync() ;
+    return result.changes == 1;
 }

@@ -10,12 +10,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#add5fa",
   },
     botao: {
+    marginBottom:"2%",
     width: "80%", 
     height: "6%",
     borderRadius: 2,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fa5f49",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+    botaoLimpar: {
+    width: "80%", 
+    height: "6%",
+    borderRadius: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#59AC77",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -45,7 +59,7 @@ const styles = StyleSheet.create({
   listaTemas:{
     width:"100%",
     
-  }
+  },
 });
 
 export default styles;

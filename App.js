@@ -28,7 +28,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Tela Inicial' }} />
-        <Stack.Screen name="Temas" component={TemaScreen} options={{ title: 'Perguntas' }} />
+        <Stack.Screen name="Temas" component={TemaScreen} options={{ title: 'Temas' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
