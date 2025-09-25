@@ -3,7 +3,7 @@ import * as SQLite from 'expo-sqlite';
 export async function getDbConnection() {
     const cx = await SQLite.openDatabaseAsync('Quiz.db');
     return cx;
-}
+};
 
 export async function createTableTemas() {    
     const query = `CREATE TABLE IF NOT EXISTS temas (
@@ -41,3 +41,31 @@ export async function createTablePerguntas() {
         console.error("Erro ao criar tabelas:", error);
     }
 };
+
+export async function obtemTodosOsTemas() {
+    var retorno = []
+  const cx = await getDbConnection();
+  try {
+    const temas = await cx.getAllAsync('SELECT * FROM temas;');
+    console.log("Temas encontrados:", temas);
+    for (const registro of temas) {        
+        let obj = {
+            id: registro.id,
+            nome: registro.nome,        
+        }
+        retorno.push(obj);
+    }
+    return retorno;
+  } catch (error) {
+    console.error("Erro ao buscar temas:", error);
+    return [];
+  }
+};
+
+export async function adicionaTema(tema) {    
+    let dbCx = await getDbConnection();    
+    let query = 'insert into temas (nome_tema) values (?)';
+    const result = await dbCx.runAsync(query, [tema.nome]);    
+    await dbCx.closeAsync() ;    
+    return result.changes == 1;    
+}
