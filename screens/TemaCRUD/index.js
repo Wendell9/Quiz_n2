@@ -7,12 +7,15 @@ import {
 import { useState, useEffect } from 'react';
 import * as DbService from '../../services/dbservice';
 import CardTema from '../../Componentes/CardTema';
+import { useNavigation } from '@react-navigation/native'; 
 
 export default function TemaScreen() {
 
   const [temas, setTemas] = useState([]);
   const [id, setId] = useState();
   const [nomeTema, setNomeTema] = useState();
+
+  const navigation = useNavigation();
 
   async function processamentoUseEffect() {
     try {
@@ -124,6 +127,11 @@ export default function TemaScreen() {
     }
   }
 
+const irParaPerguntas = (tema) => {
+        // Passa o objeto 'tema' inteiro como parâmetro
+        navigation.navigate('Perguntas', { tema: tema });
+    };
+
   return (
     <View style={styles.container}>
 
@@ -146,7 +154,7 @@ export default function TemaScreen() {
         {
           temas.map((tema, index) => (
             <CardTema tema={tema} key={index.toString()}
-            removerElemento={removerElemento} editar={editar}
+            removerElemento={removerElemento} editar={editar} irParaPerguntas={irParaPerguntas}
               />
           ))
         }
