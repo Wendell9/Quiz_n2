@@ -42,6 +42,35 @@ export async function createTablePerguntas() {
     }
 };
 
+export async function adicionaPergunta(tema_id, perguntaObj) {
+    console.log("Inserindo a pergunta");
+    console.log(perguntaObj);
+    let dbCx = await getDbConnection();    
+
+    // PRAGMA foreign_keys = ON;
+    await dbCx.execAsync('PRAGMA foreign_keys = ON;');
+    
+    let query = 'INSERT INTO perguntas (pergunta, alternativa_a, alternativa_b, alternativa_c, alternativa_d, alternativa_correta, tema_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    
+    // Mapeia o array de alternativas para extrair a alternativa correta e o texto das 4 alternativas
+    const alternativaCorreta = perguntaObj.alternativas.find(alt => alt.isCorrect);
+    
+    const params = [
+        perguntaObj.pergunta,
+        perguntaObj.alternativas[0].text,
+        perguntaObj.alternativas[1].text,
+        perguntaObj.alternativas[2].text,
+        perguntaObj.alternativas[3].text,
+        alternativaCorreta ? alternativaCorreta.text : '', // Pega o texto da alternativa correta
+        tema_id
+    ];
+
+    const result = await dbCx.runAsync(query, params);    
+    await dbCx.closeAsync();    
+
+    return result.changes === 1;    
+};
+
 export async function obtemTodosOsTemas() {
     var retorno = []
   const cx = await getDbConnection();
@@ -87,3 +116,30 @@ export async function alteraTema(tema) {
     await dbCx.closeAsync() ;
     return result.changes == 1;
 }
+
+export async function obterPerguntasPorTema(temaId) {
+    console.log(`Buscando perguntas para o tema ID: ${temaId}`);
+    let dbCx = await getDbConnection();    
+    let query = 'SELECT * FROM perguntas WHERE tema_id = ?;';
+
+    let retorno = []
+    
+    try {
+        // O método getAllAsync retorna todas as linhas que correspondem à query
+        const resultados = await dbCx.getAllAsync(query, [temaId]);
+        await dbCx.closeAsync();
+
+        for (const registro of resultados) {        
+        let obj = {
+            id: registro.id,
+            pergunta: registro.pergunta,        
+        }
+           retorno.push(obj);
+    }
+        console.log(retorno)
+        return retorno;
+    } catch (error) {
+        console.error("Erro ao obter perguntas:", error);
+        throw error;
+    }
+};

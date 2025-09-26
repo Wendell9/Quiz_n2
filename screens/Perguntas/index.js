@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native'; 
+import * as DbService from '../../services/dbservice';
 
 export default function Perguntas() {
     const navigation = useNavigation();
@@ -23,6 +24,23 @@ export default function Perguntas() {
         navigation.navigate('Pergunta', { temaId: temaId });
     };
 
+        // Função para carregar as perguntas do banco de dados
+    const carregarPerguntas = async () => {
+        try {
+          console.log(tema.id)
+            const data = await DbService.obterPerguntasPorTema(tema.id);
+            setPerguntas(data); // Atualiza o estado com os dados recebidos
+        } catch (error) {
+            console.error("Erro ao carregar perguntas:", error);
+            Alert.alert("Erro", "Não foi possível carregar as perguntas.");
+        }
+    };
+
+    // UseEffect para chamar a função de carregamento
+    useEffect(() => {
+        carregarPerguntas();
+    }, [tema.id]); // O efeito é executado sempre que o tema.id mudar
+
     return (
         <View style={styles.container}>
             <Text>Tela de Perguntas</Text>
@@ -31,12 +49,17 @@ export default function Perguntas() {
           <Text style={styles.textoBotao}>Nova Pergunta</Text>
         </TouchableOpacity>
 
-        <ScrollView contentContainerStyle={styles.listaPerguntas}>
+        <ScrollView  style={styles.listaPerguntasScroll}
+        contentContainerStyle={styles.listaPerguntas}>
         {
-          perguntas.map((pergunta, index) => (
-            <CardPergunta tema={pergunta} key={index.toString()}
-            removerElemento={removerElemento} editar={editar} 
-              />
+        perguntas.map((pergunta) => (
+            <TouchableOpacity 
+              style={styles.cardPergunta} // Crie esse estilo no seu arquivo styles.js
+              
+              key={pergunta.id.toString()}
+            >
+              <Text style={styles.textoPergunta}>{pergunta.pergunta}</Text>
+            </TouchableOpacity>
           ))
         }
 

@@ -6,15 +6,20 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Alert
 } from 'react-native';
 import styles from './styles';
 import { useRoute } from '@react-navigation/native'; 
+import * as DbService from '../../services/dbservice';
+import { useNavigation } from '@react-navigation/native'; 
+
 
 export default function Pergunta() {
+  const navigation = useNavigation();
   // Estado para a pergunta principal
   const [pergunta, setPergunta] = useState('');
   const route = useRoute();
-  const { temaId } = route.params; // Lê o parâmetro 'temaId'
+  const { temaId, perguntaId} = route.params; // Lê o parâmetro 'temaId'
 
   // Estado para as quatro alternativas. 'isCorrect' é booleano para a resposta correta.
   const [alternativas, setAlternativas] = useState([
@@ -41,6 +46,49 @@ export default function Pergunta() {
     );
     setAlternativas(novasAlternativas);
   };
+
+  const SalvarPergunta = async () => {
+    if (!pergunta.trim()) {
+      Alert.alert("Atenção", "Por favor, escreva a pergunta.");
+      return;
+    }
+    const alternativaCorreta = alternativas.find(alt => alt.isCorrect);
+    if (!alternativaCorreta) {
+      Alert.alert("Atenção", "Por favor, selecione a alternativa correta.");
+      return;
+    }
+
+    try {
+      const dadosPergunta = {
+        pergunta: pergunta,
+        alternativas: alternativas,
+      };
+
+      let resultado;
+
+      // Verifica se o perguntaId foi passado. Se sim, é uma edição.
+      if (perguntaId !== undefined) {
+        console.log("Modo de Edição: Chamando atualizaPergunta.");
+        // Você precisará criar essa função na próxima etapa
+        resultado = await atualizaPergunta(perguntaId, dadosPergunta);
+      } else {
+        console.log("Modo de Criação: Chamando adicionaPergunta.");
+        resultado = await DbService.adicionaPergunta(temaId, dadosPergunta);
+      }
+      
+      if (resultado) {
+        Alert.alert("Sucesso!", "Pergunta salva com sucesso.");
+        navigation.goBack();
+      } else {
+        Alert.alert("Erro", "Não foi possível salvar a pergunta.");
+      }
+
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Erro", "Ocorreu um erro ao salvar a pergunta.");
+    }
+  };
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -79,13 +127,7 @@ export default function Pergunta() {
       {/* Exemplo de como você pode pegar os dados para salvar */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          const dadosPergunta = {
-            pergunta: pergunta,
-            alternativas: alternativas,
-          };
-          console.log('Dados da Pergunta:', dadosPergunta);
-        }}
+        onPress={SalvarPergunta}
       >
         <Text style={styles.buttonText}>Salvar Pergunta</Text>
       </TouchableOpacity>

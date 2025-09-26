@@ -56,10 +56,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,   
     fontSize: 16,            
   },
-  listaTemas:{
+  listaPerguntas:{
     width:"100%",
+    alignItems:'center',
     
   },
+  cardPergunta: {
+    backgroundColor: '#f0f0f0',
+    width:"80%",
+    alignItems:'center',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  textoPergunta: {
+    fontSize: 16,
+    color: '#333',
+  },
+  listaPerguntasScroll: {
+  width: "100%", // O ScrollView ocupa toda a largura
+},
 });
 
 export default styles;
