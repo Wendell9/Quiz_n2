@@ -269,6 +269,31 @@ export async function puxarDadosPergunta(idPergunta, idTema) {
   }
 }
 
+export async function verificaPerguntaExistente(idTema, textoPergunta) {
+    let dbCx = await getDbConnection();
+
+    if (!dbCx) {
+        console.error("Conexão com o banco de dados falhou, não é possível verificar a pergunta.");
+        return false;
+    }
+
+    // A query agora usa TRIM() e LOWER() para uma busca robusta
+    const query = `SELECT * FROM perguntas WHERE tema_id = ? AND LOWER(TRIM(pergunta)) = LOWER(TRIM(?));`;
+
+    // Você passa o texto original, e o banco de dados fará a limpeza e conversão
+    const params = [idTema, textoPergunta];
+
+    try {
+        const resultado = await dbCx.getAllAsync(query, params);
+        await dbCx.closeAsync();
+
+        return resultado.length > 0;
+    } catch (error) {
+        console.error("Erro ao verificar pergunta existente:", error);
+        return false;
+    }
+}
+
 export async function atualizaPergunta(idPergunta, perguntaObj, idTema) {
   console.log(
     `Atualizando perguntas para o tema ID: ${idTema} Pergunta:${idPergunta}`

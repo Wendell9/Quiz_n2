@@ -67,6 +67,18 @@ export default function Pergunta() {
     setAlternativas(novasAlternativas);
   };
 
+  function temAlternativasDuplicadas(alternativas) {
+    // 1. Pega apenas o texto de cada alternativa
+    const textos = alternativas.map(alt => alt.text.toLowerCase().trim());
+
+    // 2. Cria um Set com esses textos. O Set remove duplicatas automaticamente.
+    const textosUnicos = new Set(textos);
+
+    // 3. Compara o tamanho do Set com o número total de alternativas.
+    // Se os tamanhos forem diferentes, há duplicatas.
+    return textosUnicos.size !== alternativas.length;
+}
+
   const SalvarPergunta = async () => {
     if (!pergunta.trim()) {
       Alert.alert("Atenção", "Por favor, escreva a pergunta.");
@@ -77,11 +89,21 @@ export default function Pergunta() {
       Alert.alert("Atenção", "Por favor, selecione a alternativa correta.");
       return;
     }
-
+    if(temAlternativasDuplicadas(alternativas)){
+      Alert.alert("Atenção", "Não é permitido a mesma resposta em mais de uma alternativa")
+      return
+    }
     const algumaRespostaVazia = alternativas.some((alt) => alt.text === "");
 
     if (algumaRespostaVazia) {
       Alert.alert("Atenção", "Por favor, preencha todas as respostas.");
+      return;
+    }
+
+    let perguntaJaExiste = await DbService.verificaPerguntaExistente(temaId, pergunta)
+
+    if(perguntaJaExiste){
+      Alert.alert("Atenção", "Essa pergunta ja foi cadastrada. Por favor escolha outra pergunta;");
       return;
     }
 
