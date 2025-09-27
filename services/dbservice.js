@@ -1,8 +1,36 @@
+import * as FileSystem from 'expo-file-system/legacy';
 import * as SQLite from "expo-sqlite";
 
+const databaseName = "Quiz.db";
+
+export async function limpaBancoDeDados() {
+  const dbPath = `${FileSystem.documentDirectory}SQLite/${databaseName}`;
+
+  try {
+    // Usamos o getInfoAsync para verificar se o arquivo existe
+    const fileInfo = await FileSystem.getInfoAsync(dbPath);
+    
+    if (fileInfo.exists) {
+      console.log("Banco de dados existente. Apagando...");
+      await FileSystem.deleteAsync(dbPath);
+      console.log("Banco de dados apagado com sucesso.");
+    } else {
+      console.log("Nenhum banco de dados encontrado para apagar.");
+    }
+  } catch (error) {
+    console.error("Erro ao tentar apagar o banco de dados:", error);
+  }
+}
+
 export async function getDbConnection() {
-  const cx = await SQLite.openDatabaseAsync("Quiz.db");
-  return cx;
+  try {
+    const cx = await SQLite.openDatabaseAsync("Quiz.db");
+    console.log("Conexão com o banco de dados aberta.");
+    return cx;
+  } catch (error) {
+    console.error("Erro ao abrir o banco de dados:", error);
+    return null; // Retorna null em caso de falha
+  }
 }
 
 export async function createTableTemas() {
@@ -10,12 +38,13 @@ export async function createTableTemas() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome_tema TEXT NOT NULL
         );`;
-//  const queryLimpaTabelaTema = `DROP TABLE IF EXISTS temas;`;
   try {
     var cx = await getDbConnection();
-
-//    await cx.execAsync(queryLimpaTabelaTema);
-
+    // Verifique se a conexão é válida antes de tentar usá-la
+    if (!cx) {
+      console.error("Não foi possível estabelecer a conexão.");
+      return;
+    }
     await cx.execAsync(query);
     await cx.closeAsync();
     console.log("Tabelas 'temas' criadas com sucesso.");
@@ -26,12 +55,15 @@ export async function createTableTemas() {
 
 // Função para excluir as perguntas de um tema
 export async function excluirPerguntasPorTema(idTema) {
+  console.log("Perguntas do id a seguir serão excluidas: ", idTema);
   let dbCx = await getDbConnection();
-  await dbCx.execAsync(`DELETE FROM perguntas WHexcluiTodasAsPerguntasERE tema_id = ?;`, [idTema]);
+  const result = await dbCx.runAsync(`DELETE FROM perguntas WHERE tema_id = ?;`, idTema);
+  console.log(`Linhas afetadas pela exclusão: ${result.changes}`);
   await dbCx.closeAsync();
 }
 
 export async function excluiTodasAsPerguntas() {
+  console.log("Excluindo todas as perguntas...");
   let dbCx = await getDbConnection();
   await dbCx.runAsync(`DELETE FROM perguntas`);
   await dbCx.closeAsync();
@@ -49,10 +81,10 @@ export async function createTablePerguntas() {
             tema_id INTEGER NOT NULL,
             FOREIGN KEY (tema_id) REFERENCES temas (id)
         );`;
-//  const queryLimpaTabelaPergunta = `DROP TABLE IF EXISTS perguntas;`;
+  //  const queryLimpaTabelaPergunta = `DROP TABLE IF EXISTS perguntas;`;
   try {
     var cx = await getDbConnection();
-//    await cx.execAsync(queryLimpaTabelaPergunta);
+    //    await cx.execAsync(queryLimpaTabelaPergunta);
     await cx.execAsync(query);
     await cx.closeAsync();
     console.log("Tabelas'perguntas' criadas com sucesso.");
@@ -95,15 +127,18 @@ export async function adicionaPergunta(tema_id, perguntaObj) {
 export async function obtemTodosOsTemas() {
   var retorno = [];
   const cx = await getDbConnection();
+
   try {
     const temas = await cx.getAllAsync("SELECT * FROM temas;");
     console.log("Temas encontrados:", temas);
-    for (const registro of temas) {
-      let obj = {
-        id: registro.id,
-        nome: registro.nome_tema,
-      };
-      retorno.push(obj);
+    if (temas.length != 0) {
+      for (const registro of temas) {
+        let obj = {
+          id: registro.id,
+          nome: registro.nome_tema,
+        };
+        retorno.push(obj);
+      }
     }
     return retorno;
   } catch (error) {
@@ -159,23 +194,29 @@ export async function alteraTema(tema) {
 export async function obterPerguntasPorTema(temaId) {
   console.log(`Buscando perguntas para o tema ID: ${temaId}`);
   let dbCx = await getDbConnection();
-  let query = "SELECT * FROM perguntas WHERE tema_id = ?;";
 
+  // Verificação essencial: O erro acontece se a conexão for nula aqui
+  if (!dbCx) {
+    console.error("Conexão com o banco de dados falhou, não é possível buscar perguntas.");
+    return []; // Retorne um array vazio ou lance um erro
+  }
+
+  let query = "SELECT * FROM perguntas WHERE tema_id = ?;";
   let retorno = [];
 
   try {
-    // O método getAllAsync retorna todas as linhas que correspondem à query
     const resultados = await dbCx.getAllAsync(query, [temaId]);
     await dbCx.closeAsync();
-
-    for (const registro of resultados) {
-      let obj = {
-        id: registro.id,
-        pergunta: registro.pergunta,
-      };
-      retorno.push(obj);
+    if (resultados.length > 0) {
+      for (const registro of resultados) {
+        let obj = {
+          id: registro.id,
+          pergunta: registro.pergunta,
+        };
+        retorno.push(obj);
+      }
+      console.log(retorno);
     }
-    console.log(retorno);
     return retorno;
   } catch (error) {
     console.error("Erro ao obter perguntas:", error);

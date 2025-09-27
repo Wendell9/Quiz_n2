@@ -12,6 +12,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
     async function processamentoUseEffect() {
     try {
+      await DbService.limpaBancoDeDados();
       await DbService.createTableTemas();
       await DbService.createTablePerguntas();
     }

@@ -106,7 +106,7 @@ export default function TemaScreen() {
     Alert.alert("Atenção", "Confirma a remoção do tema?", [
       {
         text: "Sim",
-        onPress: () => efetivaRemoverTema(identificador),
+        onPress: async () => await efetivaRemoverTema(identificador),
       },
       {
         text: "Não",
@@ -116,6 +116,9 @@ export default function TemaScreen() {
   }
 
   function apagarTudo() {
+    if (temas.length == 0) {
+      Alert.alert("Não há temas para serem excluidos");
+    }
     Alert.alert("Atenção", "Confirma a exclusão de todos os temas?", [
       {
         text: "Sim",
@@ -130,7 +133,7 @@ export default function TemaScreen() {
 
   async function excluirTodosTemas() {
     try {
-      console.log("Entrando em excluir todos os temas")
+      console.log("Entrando em excluir todos os temas");
       await DbService.excluiTodosOsTemas();
       Keyboard.dismiss();
       limparCampos();
@@ -185,9 +188,9 @@ export default function TemaScreen() {
 
       <TouchableOpacity
         style={styles.botaoExcluirTudo}
-        onPress={async () => await excluirTodosTemas()}
+        onPress={async () => await apagarTudo()}
       >
-        <Text style={styles.textoBotao}>Apagar Tudo</Text>
+        <Text style={styles.textoBotao}>Excluir Temas</Text>
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.listaTemas}>

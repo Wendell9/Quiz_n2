@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import React from 'react';
+import React from "react";
 import { useRoute, useFocusEffect } from "@react-navigation/native"; // Importa o hook
 import {
   Alert,
@@ -39,6 +39,7 @@ export default function Perguntas() {
     try {
       console.log(tema.id);
       const data = await DbService.obterPerguntasPorTema(tema.id);
+      console.log(data);
       setPerguntas(data); // Atualiza o estado com os dados recebidos
     } catch (error) {
       console.error("Erro ao carregar perguntas:", error);
@@ -51,6 +52,34 @@ export default function Perguntas() {
       {
         text: "Sim",
         onPress: () => efetivaRemoverPergunta(idPergunta, idTema),
+      },
+      {
+        text: "Não",
+        style: "cancel",
+      },
+    ]);
+  }
+
+  async function excluirTodasPerguntas(idTema) {
+    if (perguntas.length == 0) {
+      Alert.alert("Não há perguntas para serem excluidas!");
+      return;
+    }
+    Alert.alert("Atenção", "Confirma a exclusão de todas as perguntas?", [
+      {
+        text: "Sim",
+        onPress: async () => {
+          try {
+            // 1. Exclui as perguntas
+            await DbService.excluirPerguntasPorTema(idTema);
+            // 2. Recarrega a lista APÓS a exclusão
+            await carregarPerguntas();
+            Alert.alert("Sucesso", "Todas as perguntas foram excluídas.");
+          } catch (error) {
+            console.error("Erro ao excluir perguntas:", error);
+            Alert.alert("Erro", "Não foi possível excluir as perguntas.");
+          }
+        },
       },
       {
         text: "Não",
@@ -89,6 +118,13 @@ export default function Perguntas() {
         onPress={() => AdicionarPergunta(tema.id)}
       >
         <Text style={styles.textoBotao}>Nova Pergunta</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.botaoExcluirTudo}
+        onPress={async () => await excluirTodasPerguntas(tema.id)}
+      >
+        <Text style={styles.textoBotao}>Excluir Perguntas</Text>
       </TouchableOpacity>
 
       <ScrollView
