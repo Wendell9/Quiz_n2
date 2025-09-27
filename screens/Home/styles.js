@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     backgroundColor: "#add5fa",
+    gap:'5%'
   },
     botao: {
     width: "80%", // Make buttons wider
