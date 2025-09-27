@@ -130,11 +130,12 @@ export default function TemaScreen() {
 
   async function excluirTodosTemas() {
     try {
+      console.log("Entrando em excluir todos os temas")
       await DbService.excluiTodosOsTemas();
       Keyboard.dismiss();
       limparCampos();
       await carregaDados();
-      Alert.alert("Temas apagado com sucesso!!!");
+      Alert.alert("Temas apagados com sucesso!!!");
     } catch (e) {
       Alert.alert(e);
     }
@@ -180,6 +181,13 @@ export default function TemaScreen() {
         onPress={() => limparCampos()}
       >
         <Text style={styles.textoBotao}>Limpar</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.botaoExcluirTudo}
+        onPress={async () => await excluirTodosTemas()}
+      >
+        <Text style={styles.textoBotao}>Apagar Tudo</Text>
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.listaTemas}>

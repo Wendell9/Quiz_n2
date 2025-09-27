@@ -10,11 +10,11 @@ export async function createTableTemas() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome_tema TEXT NOT NULL
         );`;
-  const queryLimpaTabelaTema = `DROP TABLE IF EXISTS temas;`;
+//  const queryLimpaTabelaTema = `DROP TABLE IF EXISTS temas;`;
   try {
     var cx = await getDbConnection();
 
-    await cx.execAsync(queryLimpaTabelaTema);
+//    await cx.execAsync(queryLimpaTabelaTema);
 
     await cx.execAsync(query);
     await cx.closeAsync();
@@ -33,7 +33,7 @@ export async function excluirPerguntasPorTema(idTema) {
 
 export async function excluiTodasAsPerguntas() {
   let dbCx = await getDbConnection();
-  await dbCx.execAsync(`DELETE FROM perguntas`);
+  await dbCx.runAsync(`DELETE FROM perguntas`);
   await dbCx.closeAsync();
 }
 
@@ -49,10 +49,10 @@ export async function createTablePerguntas() {
             tema_id INTEGER NOT NULL,
             FOREIGN KEY (tema_id) REFERENCES temas (id)
         );`;
-  const queryLimpaTabelaPergunta = `DROP TABLE IF EXISTS perguntas;`;
+//  const queryLimpaTabelaPergunta = `DROP TABLE IF EXISTS perguntas;`;
   try {
     var cx = await getDbConnection();
-    await cx.execAsync(queryLimpaTabelaPergunta);
+//    await cx.execAsync(queryLimpaTabelaPergunta);
     await cx.execAsync(query);
     await cx.closeAsync();
     console.log("Tabelas'perguntas' criadas com sucesso.");
@@ -126,7 +126,7 @@ export async function excluiTodosOsTemas() {
   await excluiTodasAsPerguntas();
   let dbCx = await getDbConnection();
   let query = "delete from temas";
-  const result = await dbCx.execAsync(query);
+  const result = await dbCx.runAsync(query);
   await dbCx.closeAsync();
   return result.changes == 1;
 }

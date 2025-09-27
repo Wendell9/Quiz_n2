@@ -167,7 +167,7 @@ export default function Pergunta() {
       ))}
 
       {/* Exemplo de como você pode pegar os dados para salvar */}
-      <TouchableOpacity style={styles.button} onPress={SalvarPergunta}>
+      <TouchableOpacity style={styles.button} onPress={async()=> await SalvarPergunta()}>
         <Text style={styles.buttonText}>Salvar Pergunta</Text>
       </TouchableOpacity>
     </ScrollView>
