@@ -51,16 +51,18 @@ export async function adicionaPergunta(tema_id, perguntaObj) {
     await dbCx.execAsync('PRAGMA foreign_keys = ON;');
     
     let query = 'INSERT INTO perguntas (pergunta, alternativa_a, alternativa_b, alternativa_c, alternativa_d, alternativa_correta, tema_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    
+    console.log("Salvando a alternativa correta", perguntaObj.alternativaCorreta)
     const params = [
         perguntaObj.pergunta,
-        perguntaObj.alternativas[0].text,
-        perguntaObj.alternativas[1].text,
-        perguntaObj.alternativas[2].text,
-        perguntaObj.alternativas[3].text,
+        perguntaObj.alternativas.find(alt => alt.id == "A").text,
+        perguntaObj.alternativas.find(alt => alt.id == "B").text,
+        perguntaObj.alternativas.find(alt => alt.id == "C").text,
+        perguntaObj.alternativas.find(alt => alt.id == "D").text,
         perguntaObj.alternativaCorreta,
         tema_id
     ];
+
+    console.log(params)
 
     const result = await dbCx.runAsync(query, params);    
     await dbCx.closeAsync();    
@@ -146,5 +148,62 @@ export async function obterPerguntasPorTema(temaId) {
     } catch (error) {
         console.error("Erro ao obter perguntas:", error);
         throw error;
+    }
+};
+
+export async function puxarDadosPergunta(idPergunta, idTema) {
+    console.log(`Buscando perguntas para o tema ID: ${idTema} Pergunta:${idPergunta}`);
+    let dbCx = await getDbConnection();    
+    let query = 'SELECT * FROM perguntas WHERE tema_id = ? and id = ?;';
+    let pergunta;
+
+    try {
+        const resultado = await dbCx.getAllAsync(query, [idTema,idPergunta])
+        const dadosDaPergunta = resultado[0]; //Pega o primeiro elemento do array
+        console.log(dadosDaPergunta.alternativa_correta)
+        await dbCx.closeAsync();
+        pergunta = {
+            textoPergunta:dadosDaPergunta.pergunta,
+            alternativas:[  {id: "A", text:dadosDaPergunta.alternativa_a, isCorrect: dadosDaPergunta.alternativa_correta == "A"},
+                            {id:"B", text:dadosDaPergunta.alternativa_b, isCorrect: dadosDaPergunta.alternativa_correta == "B"},
+                            {id:"C", text:dadosDaPergunta.alternativa_c, isCorrect: dadosDaPergunta.alternativa_correta == "C"},
+                            {id:"D",text:dadosDaPergunta.alternativa_d, isCorrect: dadosDaPergunta.alternativa_correta == "D"}
+            ],
+        }
+        console.log(pergunta);
+        return pergunta;
+
+    } catch (error) {
+        console.error("Não foi possível puxar os dados da pergunta", error)
+    }
+};
+
+export async function atualizaPergunta(idPergunta, perguntaObj, idTema) {
+    console.log(`Atualizando perguntas para o tema ID: ${idTema} Pergunta:${idPergunta}`);
+    let dbCx = await getDbConnection();    
+    let query = 'UPDATE perguntas set pergunta = ?, alternativa_a = ?, alternativa_b = ?, alternativa_c = ?, alternativa_d = ?, alternativa_correta = ? WHERE tema_id = ? and id = ?;';
+    
+    console.log(perguntaObj.alternativas.find(alt => alt.id == "A").text)
+
+    try {
+    const params = [
+        perguntaObj.pergunta,
+        perguntaObj.alternativas.find(alt => alt.id == "A").text,
+        perguntaObj.alternativas.find(alt => alt.id == "B").text,
+        perguntaObj.alternativas.find(alt => alt.id == "C").text,
+        perguntaObj.alternativas.find(alt => alt.id == "D").text,
+        perguntaObj.alternativaCorreta,
+        idTema,
+        idPergunta
+    ];
+
+    console.log(params)
+
+    const result = await dbCx.runAsync(query, params);    
+    await dbCx.closeAsync(); 
+    return result.changes === 1;
+
+    } catch (error) {
+        console.error("Não foi possível atualizar os dados da pergunta", error)
     }
 };

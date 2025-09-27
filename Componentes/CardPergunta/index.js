@@ -22,7 +22,7 @@ export default function CardPergunta({ pergunta, removerElemento, editar, idTema
                     <AntDesign name="delete" size={24} color="red" />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => editar(tema.id)}>
+                <TouchableOpacity onPress={() => editar(idTema,pergunta.id)}>
                     <Entypo name="edit" size={24} color="black" />
                 </TouchableOpacity>
 

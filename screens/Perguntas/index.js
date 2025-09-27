@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useRoute } from "@react-navigation/native"; // Importa o hook
+import React from 'react';
+import { useRoute, useFocusEffect } from "@react-navigation/native"; // Importa o hook
 import {
   Alert,
   Text,
@@ -13,7 +14,6 @@ import {
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import * as DbService from "../../services/dbservice";
-import cardPergunta from "../../Componentes/CardPergunta";
 import CardPergunta from "../../Componentes/CardPergunta";
 
 export default function Perguntas() {
@@ -22,11 +22,15 @@ export default function Perguntas() {
   const { tema } = route.params; // Lê o parâmetro 'temaId'
   const [perguntas, setPerguntas] = useState([]);
 
-  useEffect(() => {
-    // Você pode usar o temaId para carregar os dados das perguntas aqui
-    console.log(`Carregando perguntas para o tema ID: ${tema.id}`);
-    // Ex: const perguntasDoTema = obterPerguntasPorId(temaId);
-  }, [tema.id]);
+  useFocusEffect(
+    React.useCallback(() => {
+      carregarPerguntas();
+
+      // Se você precisar de uma função de "limpeza",
+      // ela é retornada aqui.
+      // return () => alert('Tela desfocada');
+    }, [])
+  );
 
   const AdicionarPergunta = (temaId) => {
     navigation.navigate("Pergunta", { temaId: temaId });
@@ -64,13 +68,13 @@ export default function Perguntas() {
       await carregarPerguntas();
       Alert.alert("Pergunta apagado com sucesso!!!");
     } catch (e) {
-      console.error("Erro ao realizar a exclusão: ",e)
-      Alert.alert("Erro", "Não foi possível realizar a exclusão.")
+      console.error("Erro ao realizar a exclusão: ", e);
+      Alert.alert("Erro", "Não foi possível realizar a exclusão.");
     }
   }
 
-  async function editar(temaId,perguntaId) {
-    navigation.navigate("Pergunta", { temaId: temaId, perguntaId: perguntaId});
+  async function editar(temaId, perguntaId) {
+    navigation.navigate("Pergunta", { temaId: temaId, perguntaId: perguntaId });
   }
 
   // UseEffect para chamar a função de carregamento

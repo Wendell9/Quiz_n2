@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,33 +6,46 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert
-} from 'react-native';
-import styles from './styles';
-import { useRoute } from '@react-navigation/native'; 
-import * as DbService from '../../services/dbservice';
-import { useNavigation } from '@react-navigation/native'; 
-
+  Alert,
+} from "react-native";
+import styles from "./styles";
+import { useRoute } from "@react-navigation/native";
+import * as DbService from "../../services/dbservice";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Pergunta() {
   const navigation = useNavigation();
   // Estado para a pergunta principal
-  const [pergunta, setPergunta] = useState('');
+  const [pergunta, setPergunta] = useState("");
   const route = useRoute();
-  const { temaId, perguntaId} = route.params; // Lê o parâmetro 'temaId'
+  const { temaId, perguntaId } = route.params; // Lê o parâmetro 'temaId'
 
-useEffect(() => {
-        if (perguntaId) {
-            carregarDadosEditar();
-        }
-    }, [perguntaId]);
+  useEffect(() => {
+    if (perguntaId) {
+      carregarDadosEditar();
+    }
+  }, [perguntaId]);
+
+  async function carregarDadosEditar() {
+    if (perguntaId) {
+      let pergunta;
+      pergunta = await DbService.puxarDadosPergunta(perguntaId, temaId);
+      if (pergunta) {
+        console.log("A pergunta puxada do banco de dados foi: ", pergunta)
+        setPergunta(pergunta.textoPergunta);
+        setAlternativas(pergunta.alternativas);
+      } else {
+        console.log("Não foi possível encontrar a pergunta para editar");
+      }
+    }
+  }
 
   // Estado para as quatro alternativas. 'isCorrect' é booleano para a resposta correta.
   const [alternativas, setAlternativas] = useState([
-    { id: 'A', text: '', isCorrect: false },
-    { id: 'B', text: '', isCorrect: false },
-    { id: 'C', text: '', isCorrect: false },
-    { id: 'D', text: '', isCorrect: false },
+    { id: "A", text: "", isCorrect: false },
+    { id: "B", text: "", isCorrect: false },
+    { id: "C", text: "", isCorrect: false },
+    { id: "D", text: "", isCorrect: false },
   ]);
 
   // Função para atualizar o texto de uma alternativa
@@ -45,10 +58,11 @@ useEffect(() => {
 
   // Função para selecionar a alternativa correta
   const handleCorrectAlternative = (id) => {
-    const novasAlternativas = alternativas.map((alt) =>
-      alt.id === id
-        ? { ...alt, isCorrect: true } // Marca esta como correta
-        : { ...alt, isCorrect: false } // Desmarca as outras
+    const novasAlternativas = alternativas.map(
+      (alt) =>
+        alt.id === id
+          ? { ...alt, isCorrect: true } // Marca esta como correta
+          : { ...alt, isCorrect: false } // Desmarca as outras
     );
     setAlternativas(novasAlternativas);
   };
@@ -58,28 +72,28 @@ useEffect(() => {
       Alert.alert("Atenção", "Por favor, escreva a pergunta.");
       return;
     }
-    const alternativaCorreta = alternativas.find(alt => alt.isCorrect);
+    const alternativaCorreta = alternativas.find((alt) => alt.isCorrect);
     if (!alternativaCorreta) {
       Alert.alert("Atenção", "Por favor, selecione a alternativa correta.");
       return;
     }
 
-    const resposta = alternativas.find(alt => alt.text=="");
-      if (!resposta) {
+    const algumaRespostaVazia = alternativas.some((alt) => alt.text === "");
+
+    if (algumaRespostaVazia) {
       Alert.alert("Atenção", "Por favor, preencha todas as respostas.");
       return;
     }
 
+    let indexCorreto;
 
-    let indexCorreto
-
-    alternativas.forEach(element => {
-      if (element.isCorrect){
-        indexCorreto = element.id
+    alternativas.forEach((element) => {
+      if (element.isCorrect) {
+        indexCorreto = element.id;
       }
     });
 
-    console.log("A alternativa correta é: " + indexCorreto)
+    console.log("A alternativa correta é: " + indexCorreto);
 
     try {
       const dadosPergunta = {
@@ -88,31 +102,31 @@ useEffect(() => {
         alternativaCorreta: indexCorreto,
       };
 
+      console.log(alternativas);
+
       let resultado;
 
       // Verifica se o perguntaId foi passado. Se sim, é uma edição.
       if (perguntaId !== undefined) {
         console.log("Modo de Edição: Chamando atualizaPergunta.");
         // Você precisará criar essa função na próxima etapa
-        resultado = await atualizaPergunta(perguntaId, dadosPergunta);
+        resultado = await DbService.atualizaPergunta(perguntaId, dadosPergunta, temaId);
       } else {
         console.log("Modo de Criação: Chamando adicionaPergunta.");
         resultado = await DbService.adicionaPergunta(temaId, dadosPergunta);
       }
-      
+      console.log(resultado);
       if (resultado) {
         Alert.alert("Sucesso!", "Pergunta salva com sucesso.");
         navigation.goBack();
       } else {
         Alert.alert("Erro", "Não foi possível salvar a pergunta.");
       }
-
     } catch (error) {
       console.error(error);
       Alert.alert("Erro", "Ocorreu um erro ao salvar a pergunta.");
     }
   };
-
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -142,17 +156,18 @@ useEffect(() => {
           <TextInput
             style={styles.inputAlternativa}
             value={alternativa.text}
-            onChangeText={(text) => handleAlternativeChange(text, alternativa.id)}
-            placeholder={`Alternativa ${String.fromCharCode(65 + alternativa.id)}`}
+            onChangeText={(text) =>
+              handleAlternativeChange(text, alternativa.id)
+            }
+            placeholder={`Alternativa ${String.fromCharCode(
+              65 + alternativa.id
+            )}`}
           />
         </View>
       ))}
 
       {/* Exemplo de como você pode pegar os dados para salvar */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={SalvarPergunta}
-      >
+      <TouchableOpacity style={styles.button} onPress={SalvarPergunta}>
         <Text style={styles.buttonText}>Salvar Pergunta</Text>
       </TouchableOpacity>
     </ScrollView>
