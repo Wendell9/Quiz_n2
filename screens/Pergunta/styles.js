@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical:"5%",
@@ -43,11 +43,11 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#fa5f49",
+    borderColor: "#59AC77",
     marginRight: 10,
   },
   circleFilled: {
-    backgroundColor: '#FFECC0',
+    backgroundColor: '#59AC77',
   },
   button: {
     backgroundColor: "#fa5f49",

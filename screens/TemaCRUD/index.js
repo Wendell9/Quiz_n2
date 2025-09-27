@@ -1,16 +1,20 @@
-import React from 'react';
-import styles from './styles';
+import styles from "./styles";
 import {
-  Alert, Text, TextInput, TouchableOpacity,
-  View, Keyboard, ScrollView, Image
-} from 'react-native';
-import { useState, useEffect } from 'react';
-import * as DbService from '../../services/dbservice';
-import CardTema from '../../Componentes/CardTema';
-import { useNavigation } from '@react-navigation/native'; 
+  Alert,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Keyboard,
+  ScrollView,
+  Image,
+} from "react-native";
+import { useState, useEffect } from "react";
+import * as DbService from "../../services/dbservice";
+import CardTema from "../../Componentes/CardTema";
+import { useNavigation } from "@react-navigation/native";
 
 export default function TemaScreen() {
-
   const [temas, setTemas] = useState([]);
   const [id, setId] = useState();
   const [nomeTema, setNomeTema] = useState();
@@ -20,20 +24,18 @@ export default function TemaScreen() {
   async function processamentoUseEffect() {
     try {
       await carregaDados();
-    }
-    catch (e) {
+    } catch (e) {
       console.log(e);
     }
   }
 
-  useEffect(
-  () => {
+  useEffect(() => {
     processamentoUseEffect(); //necessário método pois aqui não pode utilizar await...
   }, []);
 
   async function carregaDados() {
     try {
-      console.log('carregando');
+      console.log("carregando");
       let temas = await DbService.obtemTodosOsTemas();
       setTemas(temas);
     } catch (e) {
@@ -41,7 +43,7 @@ export default function TemaScreen() {
     }
   }
 
-   async function limparCampos() {
+  async function limparCampos() {
     setNomeTema("");
     setId(undefined);
     Keyboard.dismiss();
@@ -50,37 +52,36 @@ export default function TemaScreen() {
   async function salvarTema() {
     console.log("Salvando Tema");
     console.log(id);
-    let novoRegistro = (id == undefined);
+    let novoRegistro = id == undefined;
 
     let obj = {
-      nome: nomeTema
+      nome: nomeTema,
     };
 
-    const buscaTemas = temas.find(tema => tema.nome.trim().toLowerCase() == nomeTema.trim().toLowerCase());
+    const buscaTemas = temas.find(
+      (tema) => tema.nome.trim().toLowerCase() == nomeTema.trim().toLowerCase()
+    );
 
-    if (nomeTema == ""){
-      Alert.alert('Preencha o nome do tema!');
-      return
+    if (nomeTema == "") {
+      Alert.alert("Preencha o nome do tema!");
+      return;
     }
-    if (buscaTemas != undefined){
-      Alert.alert('O tema ja existe!');
-      return
+    if (buscaTemas != undefined) {
+      Alert.alert("O tema ja existe!");
+      return;
     }
 
     try {
       let resposta = false;
-      if (novoRegistro){
-        console.log("Inserindo um novo registro")
+      if (novoRegistro) {
+        console.log("Inserindo um novo registro");
         resposta = await DbService.adicionaTema(obj);
-      }
-      else{
+      } else {
         obj.id = id;
         resposta = await DbService.alteraTema(obj);
       }
-      if (resposta)
-        Alert.alert('Tema salvo com sucesso!');
-      else
-        Alert.alert('Falha ao salvar!');
+      if (resposta) Alert.alert("Tema salvo com sucesso!");
+      else Alert.alert("Falha ao salvar!");
 
       Keyboard.dismiss();
       limparCampos();
@@ -91,7 +92,7 @@ export default function TemaScreen() {
   }
 
   async function editar(identificador) {
-    const tema = temas.find(tema => tema.id == identificador);
+    const tema = temas.find((tema) => tema.id == identificador);
 
     if (tema != undefined) {
       setId(tema.id);
@@ -100,19 +101,43 @@ export default function TemaScreen() {
 
     console.log(tema);
   }
-  
+
   function removerElemento(identificador) {
-    Alert.alert('Atenção', 'Confirma a remoção do tema?',
-      [
-        {
-          text: 'Sim',
-          onPress: () => efetivaRemoverTema(identificador),
-        },
-        {
-          text: 'Não',
-          style: 'cancel',
-        }
-      ]);
+    Alert.alert("Atenção", "Confirma a remoção do tema?", [
+      {
+        text: "Sim",
+        onPress: () => efetivaRemoverTema(identificador),
+      },
+      {
+        text: "Não",
+        style: "cancel",
+      },
+    ]);
+  }
+
+  function apagarTudo() {
+    Alert.alert("Atenção", "Confirma a exclusão de todos os temas?", [
+      {
+        text: "Sim",
+        onPress: async () => await excluirTodosTemas(),
+      },
+      {
+        text: "Não",
+        style: "cancel",
+      },
+    ]);
+  }
+
+  async function excluirTodosTemas() {
+    try {
+      await DbService.excluiTodosOsTemas();
+      Keyboard.dismiss();
+      limparCampos();
+      await carregaDados();
+      Alert.alert("Temas apagado com sucesso!!!");
+    } catch (e) {
+      Alert.alert(e);
+    }
   }
 
   async function efetivaRemoverTema(identificador) {
@@ -121,44 +146,52 @@ export default function TemaScreen() {
       Keyboard.dismiss();
       limparCampos();
       await carregaDados();
-      Alert.alert('Tema apagado com sucesso!!!');
+      Alert.alert("Tema apagado com sucesso!!!");
     } catch (e) {
       Alert.alert(e);
     }
   }
 
-const irParaPerguntas = (tema) => {
-        // Passa o objeto 'tema' inteiro como parâmetro
-        navigation.navigate('Perguntas', { tema: tema });
-    };
+  const irParaPerguntas = (tema) => {
+    // Passa o objeto 'tema' inteiro como parâmetro
+    navigation.navigate("Perguntas", { tema: tema });
+  };
 
   return (
     <View style={styles.container}>
-
       <View style={styles.areaNome}>
-
-          <TextInput style={styles.caixaTexto}
-            onChangeText={(texto) => setNomeTema(texto)}
-            value={nomeTema} 
-            placeholder="Nome"/>
-            
+        <TextInput
+          style={styles.caixaTexto}
+          onChangeText={(texto) => setNomeTema(texto)}
+          value={nomeTema}
+          placeholder="Nome"
+        />
       </View>
-          <TouchableOpacity style={styles.botao} onPress={() => salvarTema()}>
-          <Text style={styles.textoBotao}>Salvar Tema</Text>
-    </TouchableOpacity>
-        <TouchableOpacity style={styles.botaoLimpar} onPress={() => limparCampos()}>
-          <Text style={styles.textoBotao}>Limpar</Text>
-    </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.botao}
+        onPress={async () => {
+          await salvarTema();
+        }}
+      >
+        <Text style={styles.textoBotao}>Salvar Tema</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.botaoLimpar}
+        onPress={() => limparCampos()}
+      >
+        <Text style={styles.textoBotao}>Limpar</Text>
+      </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.listaTemas}>
-        {
-          temas.map((tema, index) => (
-            <CardTema tema={tema} key={index.toString()}
-            removerElemento={removerElemento} editar={editar} irParaPerguntas={irParaPerguntas}
-              />
-          ))
-        }
-
+        {temas.map((tema, index) => (
+          <CardTema
+            tema={tema}
+            key={index.toString()}
+            removerElemento={removerElemento}
+            editar={editar}
+            irParaPerguntas={irParaPerguntas}
+          />
+        ))}
       </ScrollView>
     </View>
   );

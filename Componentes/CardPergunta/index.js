@@ -8,17 +8,11 @@ import styles from './styles';
 export default function CardPergunta({ pergunta, removerElemento, editar, idTema}) {
     return (
         <View style={styles.card}>
-
-            <View 
-              style={styles.cardPergunta} // Crie esse estilo no seu arquivo styles.js
-              
-              key={pergunta.id.toString()}
-            >
-              <Text style={styles.textoPergunta}>{pergunta.pergunta}</Text>
-            </View>
+            {/* O Text agora é um filho direto do card */}
+            <Text style={styles.textoPergunta}>{pergunta.pergunta}</Text>
 
             <View style={styles.dadosBotoesAcao}>
-                <TouchableOpacity onPress={() => removerElemento(pergunta.id,idTema)}>
+                <TouchableOpacity onPress={async () => await removerElemento(pergunta.id,idTema)}>
                     <AntDesign name="delete" size={24} color="red" />
                 </TouchableOpacity>
 
@@ -28,6 +22,7 @@ export default function CardPergunta({ pergunta, removerElemento, editar, idTema
 
             </View>
         </View>
+    
     );
 
 };

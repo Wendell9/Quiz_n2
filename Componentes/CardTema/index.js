@@ -12,7 +12,7 @@ export default function CardTema({ tema, removerElemento, editar, irParaPergunta
             <Text style={styles.listaNome}> {tema.nome}</Text>
 
             <View style={styles.dadosBotoesAcao}>
-                <TouchableOpacity onPress={() => removerElemento(tema.id)}>
+                <TouchableOpacity onPress={async() => await removerElemento(tema.id)}>
                     <AntDesign name="delete" size={24} color="red" />
                 </TouchableOpacity>
 
