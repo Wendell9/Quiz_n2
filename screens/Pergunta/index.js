@@ -21,12 +21,18 @@ export default function Pergunta() {
   const route = useRoute();
   const { temaId, perguntaId} = route.params; // Lê o parâmetro 'temaId'
 
+useEffect(() => {
+        if (perguntaId) {
+            carregarDadosEditar();
+        }
+    }, [perguntaId]);
+
   // Estado para as quatro alternativas. 'isCorrect' é booleano para a resposta correta.
   const [alternativas, setAlternativas] = useState([
-    { id: 0, text: '', isCorrect: false },
-    { id: 1, text: '', isCorrect: false },
-    { id: 2, text: '', isCorrect: false },
-    { id: 3, text: '', isCorrect: false },
+    { id: 'A', text: '', isCorrect: false },
+    { id: 'B', text: '', isCorrect: false },
+    { id: 'C', text: '', isCorrect: false },
+    { id: 'D', text: '', isCorrect: false },
   ]);
 
   // Função para atualizar o texto de uma alternativa
@@ -58,10 +64,28 @@ export default function Pergunta() {
       return;
     }
 
+    const resposta = alternativas.find(alt => alt.text=="");
+      if (!resposta) {
+      Alert.alert("Atenção", "Por favor, preencha todas as respostas.");
+      return;
+    }
+
+
+    let indexCorreto
+
+    alternativas.forEach(element => {
+      if (element.isCorrect){
+        indexCorreto = element.id
+      }
+    });
+
+    console.log("A alternativa correta é: " + indexCorreto)
+
     try {
       const dadosPergunta = {
         pergunta: pergunta,
         alternativas: alternativas,
+        alternativaCorreta: indexCorreto,
       };
 
       let resultado;

@@ -78,6 +78,20 @@ const styles = StyleSheet.create({
   listaPerguntasScroll: {
   width: "100%", // O ScrollView ocupa toda a largura
 },
+tituloPrincipal: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333', // Cor escura para o texto
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 5,
+  },
+  subtitulo: {
+    fontSize: 18,
+    color: '#666', // Cor um pouco mais clara
+    textAlign: 'center',
+    marginBottom: 20,
+  },
 });
 
 export default styles;

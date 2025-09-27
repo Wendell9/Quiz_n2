@@ -52,16 +52,13 @@ export async function adicionaPergunta(tema_id, perguntaObj) {
     
     let query = 'INSERT INTO perguntas (pergunta, alternativa_a, alternativa_b, alternativa_c, alternativa_d, alternativa_correta, tema_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
     
-    // Mapeia o array de alternativas para extrair a alternativa correta e o texto das 4 alternativas
-    const alternativaCorreta = perguntaObj.alternativas.find(alt => alt.isCorrect);
-    
     const params = [
         perguntaObj.pergunta,
         perguntaObj.alternativas[0].text,
         perguntaObj.alternativas[1].text,
         perguntaObj.alternativas[2].text,
         perguntaObj.alternativas[3].text,
-        alternativaCorreta ? alternativaCorreta.text : '', // Pega o texto da alternativa correta
+        perguntaObj.alternativaCorreta,
         tema_id
     ];
 
@@ -105,6 +102,14 @@ export async function excluiTema(id) {
     let dbCx = await getDbConnection();
     let query = 'delete from temas where id=?';
     const result = await dbCx.runAsync(query, id);
+    await dbCx.closeAsync() ;
+    return result.changes == 1;    
+};
+
+export async function excluiPergunta(idPergunta, idTema) {
+    let dbCx = await getDbConnection();
+    let query = 'delete from perguntas where id=? and tema_id=?';
+    const result = await dbCx.runAsync(query, [idPergunta,idTema]);
     await dbCx.closeAsync() ;
     return result.changes == 1;    
 };

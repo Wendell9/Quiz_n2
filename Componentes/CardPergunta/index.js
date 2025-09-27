@@ -5,14 +5,20 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo'; 
 import styles from './styles';
 
-export default function CardTema({ tema, removerElemento, editar }) {
+export default function CardPergunta({ pergunta, removerElemento, editar, idTema}) {
     return (
-        <TouchableOpacity style={styles.card} onPress={() => irParaPerguntas(tema)}>
+        <View style={styles.card}>
 
-            <Text style={styles.listaNome}> {tema.nome}</Text>
+            <View 
+              style={styles.cardPergunta} // Crie esse estilo no seu arquivo styles.js
+              
+              key={pergunta.id.toString()}
+            >
+              <Text style={styles.textoPergunta}>{pergunta.pergunta}</Text>
+            </View>
 
             <View style={styles.dadosBotoesAcao}>
-                <TouchableOpacity onPress={() => removerElemento(tema.id)}>
+                <TouchableOpacity onPress={() => removerElemento(pergunta.id,idTema)}>
                     <AntDesign name="delete" size={24} color="red" />
                 </TouchableOpacity>
 
@@ -21,7 +27,7 @@ export default function CardTema({ tema, removerElemento, editar }) {
                 </TouchableOpacity>
 
             </View>
-        </TouchableOpacity>
+        </View>
     );
 
 };
