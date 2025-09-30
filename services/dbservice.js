@@ -323,5 +323,108 @@ export async function atualizaPergunta(idPergunta, perguntaObj, idTema) {
     return result.changes === 1;
   } catch (error) {
     console.error("Não foi possível atualizar os dados da pergunta", error);
+
+    
   }
+  
+}
+
+// services/dbservice.js
+
+// ... (Outras funções existentes)
+
+export async function obtemTemasComContagem() {
+    var retorno = [];
+    const cx = await getDbConnection();
+
+    try {
+        const query = `
+            SELECT 
+                t.id, 
+                t.nome_tema, 
+                COUNT(p.id) AS count_perguntas
+            FROM 
+                temas t
+            LEFT JOIN 
+                perguntas p ON t.id = p.tema_id
+            GROUP BY 
+                t.id, t.nome_tema;
+        `;
+        const temas = await cx.getAllAsync(query);
+        await cx.closeAsync();
+
+        if (temas.length > 0) {
+            for (const registro of temas) {
+                let obj = {
+                    id: registro.id,
+                    nome: registro.nome_tema,
+                    count_perguntas: registro.count_perguntas // Adiciona a contagem
+                };
+                retorno.push(obj);
+            }
+        }
+        return retorno;
+    } catch (error) {
+        console.error("Erro ao buscar temas com contagem:", error);
+        return [];
+    }
+}
+
+//Função para obter perguntas aleatórias para o jogo
+export async function obtemPerguntasParaOJogo(temaId, quantidade) {
+    console.log(`Buscando ${quantidade} perguntas aleatórias para o tema ID: ${temaId}`);
+    let dbCx = await getDbConnection();
+
+    if (!dbCx) {
+        console.error("Conexão com o banco de dados falhou, não é possível buscar perguntas.");
+        return [];
+    }
+
+    // SQLite usa ORDER BY RANDOM() para seleção aleatória.
+    const query = `
+        SELECT 
+            id, 
+            pergunta, 
+            alternativa_a, 
+            alternativa_b, 
+            alternativa_c, 
+            alternativa_d, 
+            alternativa_correta
+        FROM 
+            perguntas 
+        WHERE 
+            tema_id = ? 
+        ORDER BY 
+            RANDOM() 
+        LIMIT 
+            ?;
+    `;
+    let retorno = [];
+
+    try {
+        const resultados = await dbCx.getAllAsync(query, [temaId, quantidade]);
+        await dbCx.closeAsync();
+
+        if (resultados.length > 0) {
+            for (const registro of resultados) {
+                // Estrutura para o jogo
+                let obj = {
+                    id: registro.id,
+                    pergunta: registro.pergunta,
+                    alternativas: [
+                        { id: "A", text: registro.alternativa_a },
+                        { id: "B", text: registro.alternativa_b },
+                        { id: "C", text: registro.alternativa_c },
+                        { id: "D", text: registro.alternativa_d },
+                    ],
+                    alternativaCorreta: registro.alternativa_correta,
+                };
+                retorno.push(obj);
+            }
+        }
+        return retorno;
+    } catch (error) {
+        console.error("Erro ao obter perguntas para o jogo:", error);
+        throw error;
+    }
 }
