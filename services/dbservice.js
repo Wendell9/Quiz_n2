@@ -3,6 +3,86 @@ import * as SQLite from "expo-sqlite";
 
 const databaseName = "Quiz.db";
 
+export async function popularBancoDeDados() {
+  console.log("Iniciando a inserção de tema e perguntas...");
+
+
+  const temaHistoria = { nome: "História" };
+  const perguntasHistoria = [
+    {
+      pergunta: "Em que ano o Brasil declarou sua independência?",
+      alternativas: [
+        { id: "A", text: "1822" },
+        { id: "B", text: "1889" },
+        { id: "C", text: "1500" },
+        { id: "D", text: "1789" },
+      ],
+      alternativaCorreta: "A",
+    },
+    {
+      pergunta: "Quem foi o primeiro presidente do Brasil?",
+      alternativas: [
+        { id: "A", text: "Dom Pedro I" },
+        { id: "B", text: "Getúlio Vargas" },
+        { id: "C", "text": "Marechal Deodoro da Fonseca" },
+        { id: "D", text: "Juscelino Kubitschek" },
+      ],
+      alternativaCorreta: "C",
+    },
+    {
+      pergunta: "Em qual guerra a 'Guerra-relâmpago' foi uma tática utilizada?",
+      alternativas: [
+        { id: "A", text: "Primeira Guerra Mundial" },
+        { id: "B", text: "Guerra Fria" },
+        { id: "C", text: "Guerra do Vietnã" },
+        { id: "D", text: "Segunda Guerra Mundial" },
+      ],
+      alternativaCorreta: "D",
+    },
+    {
+      pergunta: "Qual imperador romano tornou o cristianismo a religião oficial do império?",
+      alternativas: [
+        { id: "A", text: "Augusto" },
+        { id: "B", text: "Nero" },
+        { id: "C", text: "Constantino" },
+        { id: "D", text: "Júlio César" },
+      ],
+      alternativaCorreta: "C",
+    },
+    {
+      pergunta: "Qual foi o estopim da Primeira Guerra Mundial?",
+      alternativas: [
+        { id: "A", text: "Invasão da Polônia" },
+        { id: "B", text: "Tratado de Versalhes" },
+        { id: "C", text: "Crise dos Mísseis" },
+        { id: "D", text: "Assassinato do Arquiduque Francisco Ferdinando" },
+      ],
+      alternativaCorreta: "D",
+    },
+  ];
+
+  const temaAdicionado = await adicionaTema(temaHistoria);
+  if (!temaAdicionado) {
+    console.error("Erro ao adicionar o tema 'História'. Abortando.");
+    return;
+  }
+  
+  const temas = await obtemTodosOsTemas();
+  const idTemaHistoria = temas.find(t => t.nome === "História")?.id;
+
+  if (!idTemaHistoria) {
+      console.error("Não foi possível encontrar o ID do tema 'História'. Abortando.");
+      return;
+  }
+
+  for (const pergunta of perguntasHistoria) {
+    await adicionaPergunta(idTemaHistoria, pergunta);
+  }
+
+  console.log("Tema 'História' e 5 perguntas adicionados com sucesso!");
+}
+
+
 export async function limpaBancoDeDados() {
   const dbPath = `${FileSystem.documentDirectory}SQLite/${databaseName}`;
 
@@ -131,6 +211,7 @@ export async function obtemTodosOsTemas() {
   try {
     const temas = await cx.getAllAsync("SELECT * FROM temas;");
     console.log("Temas encontrados:", temas);
+    cx.closeAsync();
     if (temas.length != 0) {
       for (const registro of temas) {
         let obj = {

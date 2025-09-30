@@ -23,6 +23,7 @@ export default function App() {
       await DbService.limpaBancoDeDados();
       await DbService.createTableTemas();
       await DbService.createTablePerguntas();
+      await DbService.popularBancoDeDados();
 
       setIsDbReady(true); // Marca o banco de dados como pronto
     }
