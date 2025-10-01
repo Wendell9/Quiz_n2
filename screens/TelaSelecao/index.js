@@ -25,7 +25,7 @@ export default function TelaSelecao() {
   const navigation = useNavigation();
   const [temas, setTemas] = useState([]);
   const [selectedTema, setSelectedTema] = useState(null);
-  const [quantidade, setQuantidade] = useState('5'); // Valor padrão
+  const [quantidade, setQuantidade] = useState('0'); // Valor padrão
   const [isLoading, setIsLoading] = useState(true);
 
   // Recarregar os temas sempre que a tela estiver em foco
@@ -34,6 +34,11 @@ export default function TelaSelecao() {
       carregarTemas();
     }, [])
   );
+
+  const enviaQuantidadeTratada = (text) => {
+    const novoTexto = text.replace(/[,.-]/g, '');
+    setQuantidade(novoTexto);
+  };
 
   const carregarTemas = async () => {
     setIsLoading(true);
@@ -141,7 +146,7 @@ export default function TelaSelecao() {
       <TextInput
         style={styles.input}
         value={quantidade}
-        onChangeText={setQuantidade}
+        onChangeText={enviaQuantidadeTratada}
         keyboardType="numeric"
         placeholder="Ex: 5"
       />

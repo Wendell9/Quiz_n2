@@ -44,10 +44,8 @@ export default function JogoScreen() {
 
     // 4. Lógica de seleção da resposta
     const handleAnswerSelection = (alternativeId) => {
-        // A resposta só pode ser alterada se o usuário ainda não tiver clicado
-        if (selectedAnswer === null) {
-            setSelectedAnswer(alternativeId);
-        }
+        setSelectedAnswer(alternativeId);
+
     };
 
     // 5. Lógica de passagem para a próxima pergunta / finalização
@@ -70,10 +68,8 @@ export default function JogoScreen() {
         const isLastQuestion = currentQuestionIndex === perguntas.length - 1;
 
         if (isLastQuestion) {
-            // Fim do Quiz: Navega para a tela de resumo (próximo item)
             navigation.replace("Resumo", {
                 temaNome,
-                // Passa o array completo de resultados
                 resultados: updatedQuizResults, 
             });
             return;
@@ -126,12 +122,9 @@ export default function JogoScreen() {
                         key={alt.id}
                         style={[
                             styles.alternativaButton,
-                            // Aplica o estilo de seleção se for a alternativa escolhida
                             selectedAnswer === alt.id && styles.selectedAlternative
                         ]}
                         onPress={() => handleAnswerSelection(alt.id)}
-                        // Desabilita as alternativas após a primeira seleção (para a submissão)
-                        disabled={isAnswerSelected} 
                     >
                         <Text style={styles.alternativaText}>
                             {alt.id}) {alt.text}
