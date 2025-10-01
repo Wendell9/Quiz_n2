@@ -31,7 +31,7 @@ export default function Pergunta() {
       let pergunta;
       pergunta = await DbService.puxarDadosPergunta(perguntaId, temaId);
       if (pergunta) {
-        console.log("A pergunta puxada do banco de dados foi: ", pergunta)
+        console.log("A pergunta puxada do banco de dados foi: ", pergunta);
         setPergunta(pergunta.textoPergunta);
         setAlternativas(pergunta.alternativas);
       } else {
@@ -69,7 +69,7 @@ export default function Pergunta() {
 
   function temAlternativasDuplicadas(alternativas) {
     // 1. Pega apenas o texto de cada alternativa
-    const textos = alternativas.map(alt => alt.text.toLowerCase().trim());
+    const textos = alternativas.map((alt) => alt.text.toLowerCase().trim());
 
     // 2. Cria um Set com esses textos. O Set remove duplicatas automaticamente.
     const textosUnicos = new Set(textos);
@@ -77,21 +77,24 @@ export default function Pergunta() {
     // 3. Compara o tamanho do Set com o número total de alternativas.
     // Se os tamanhos forem diferentes, há duplicatas.
     return textosUnicos.size !== alternativas.length;
-}
+  }
 
   const SalvarPergunta = async () => {
     if (!pergunta.trim()) {
       Alert.alert("Atenção", "Por favor, escreva a pergunta.");
       return;
     }
+    if (temAlternativasDuplicadas(alternativas)) {
+      Alert.alert(
+        "Atenção",
+        "Não é permitido a mesma resposta em mais de uma alternativa"
+      );
+      return;
+    }
     const alternativaCorreta = alternativas.find((alt) => alt.isCorrect);
     if (!alternativaCorreta) {
       Alert.alert("Atenção", "Por favor, selecione a alternativa correta.");
       return;
-    }
-    if(temAlternativasDuplicadas(alternativas)){
-      Alert.alert("Atenção", "Não é permitido a mesma resposta em mais de uma alternativa")
-      return
     }
     const algumaRespostaVazia = alternativas.some((alt) => alt.text === "");
 
@@ -100,10 +103,16 @@ export default function Pergunta() {
       return;
     }
 
-    let perguntaJaExiste = await DbService.verificaPerguntaExistente(temaId, pergunta)
+    let perguntaJaExiste = await DbService.verificaPerguntaExistente(
+      temaId,
+      pergunta
+    );
 
-    if(perguntaJaExiste){
-      Alert.alert("Atenção", "Essa pergunta ja foi cadastrada. Por favor escolha outra pergunta;");
+    if (perguntaJaExiste) {
+      Alert.alert(
+        "Atenção",
+        "Essa pergunta ja foi cadastrada. Por favor escolha outra pergunta;"
+      );
       return;
     }
 
@@ -132,7 +141,11 @@ export default function Pergunta() {
       if (perguntaId !== undefined) {
         console.log("Modo de Edição: Chamando atualizaPergunta.");
         // Você precisará criar essa função na próxima etapa
-        resultado = await DbService.atualizaPergunta(perguntaId, dadosPergunta, temaId);
+        resultado = await DbService.atualizaPergunta(
+          perguntaId,
+          dadosPergunta,
+          temaId
+        );
       } else {
         console.log("Modo de Criação: Chamando adicionaPergunta.");
         resultado = await DbService.adicionaPergunta(temaId, dadosPergunta);
@@ -189,7 +202,10 @@ export default function Pergunta() {
       ))}
 
       {/* Exemplo de como você pode pegar os dados para salvar */}
-      <TouchableOpacity style={styles.button} onPress={async()=> await SalvarPergunta()}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={async () => await SalvarPergunta()}
+      >
         <Text style={styles.buttonText}>Salvar Pergunta</Text>
       </TouchableOpacity>
     </ScrollView>

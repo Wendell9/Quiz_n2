@@ -23,10 +23,6 @@ export default function Perguntas() {
   useFocusEffect(
     React.useCallback(() => {
       carregarPerguntas();
-
-      // Se você precisar de uma função de "limpeza",
-      // ela é retornada aqui.
-      // return () => alert('Tela desfocada');
     }, [])
   );
 
