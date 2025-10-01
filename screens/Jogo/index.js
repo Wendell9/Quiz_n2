@@ -41,17 +41,14 @@ export default function JogoScreen() {
             setIsLoading(false);
         }
     }
-
-    // 4. Lógica de seleção da resposta
     const handleAnswerSelection = (alternativeId) => {
         setSelectedAnswer(alternativeId);
 
     };
 
-    // 5. Lógica de passagem para a próxima pergunta / finalização
-    const handleNextQuestion = () => {
-        const currentQuestion = perguntas[currentQuestionIndex];
 
+// 5. Lógica de passagem para a próxima pergunta / finalização
+const handleNextQuestion = () => {
         // Cria o objeto de resultado para a pergunta atual
         const result = {
             pergunta: currentQuestion.pergunta,
