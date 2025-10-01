@@ -43,17 +43,14 @@ export default function JogoScreen() {
     }
 
     // 4. Lógica de seleção da resposta
-    const handleAnswerSelection = (alternativeId) => {
-        // A resposta só pode ser alterada se o usuário ainda não tiver clicado
-        if (selectedAnswer === null) {
-            setSelectedAnswer(alternativeId);
-        }
-    };
+const handleAnswerSelection = (alternativeId) => {
+    // CORRIGIDO: Remove a checagem 'if (selectedAnswer === null)'
+    // Agora, sempre que o usuário clicar, a resposta será atualizada.
+    setSelectedAnswer(alternativeId); 
+};
 
-    // 5. Lógica de passagem para a próxima pergunta / finalização
-    const handleNextQuestion = () => {
-        const currentQuestion = perguntas[currentQuestionIndex];
-
+// 5. Lógica de passagem para a próxima pergunta / finalização
+const handleNextQuestion = () => {
         // Cria o objeto de resultado para a pergunta atual
         const result = {
             pergunta: currentQuestion.pergunta,
@@ -131,7 +128,6 @@ export default function JogoScreen() {
                         ]}
                         onPress={() => handleAnswerSelection(alt.id)}
                         // Desabilita as alternativas após a primeira seleção (para a submissão)
-                        disabled={isAnswerSelected} 
                     >
                         <Text style={styles.alternativaText}>
                             {alt.id}) {alt.text}
