@@ -61,6 +61,11 @@ export default function ResumoScreen() {
         });
     };
     
+    // Define a cor do texto do percentual de acertos
+    const percentualColorStyle = percentualAcertos >= 70 // Exemplo: 70% ou mais é 'acerto'
+      ? styles.summaryAcerto
+      : percentualAcertos >= 50 ? { color: '#FFA500' } : styles.summaryErro; // Amarelo para médio, Vermelho para baixo
+
     return (
         <View style={styles.container}>
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 20 }}>
@@ -73,14 +78,12 @@ export default function ResumoScreen() {
                         Total de Perguntas: {resultados.length}
                     </Text>
                     
-                    <Text style={[
-                        styles.summaryText, 
-                        { color: totalAcertos > resultados.length / 2 ? '#59AC77' : '#fa5f49' }
-                    ]}>
+                    <Text style={styles.summaryText}>
                         Total de Acertos: {totalAcertos}
                     </Text>
 
-                    <Text style={styles.summaryText}>
+                    {/* % de Acertos com estilo condicional */}
+                    <Text style={[styles.summaryText, styles.percentualText, percentualColorStyle]}>
                         % de Acertos: {percentualAcertos}%
                     </Text>
                 </View>

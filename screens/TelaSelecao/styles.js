@@ -4,13 +4,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#add5fa",
+    backgroundColor: '#E6E6FA', // Fundo lilás claro
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#333',
+    color: '#483D8B', // Roxo escuro para o título
     textAlign: 'center',
   },
   label: {
@@ -18,11 +18,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 15,
     marginBottom: 5,
-    color: '#333',
+    color: '#483D8B', // Roxo escuro para os rótulos
   },
   input: {
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: '#8A2BE2', // Borda com a cor do botão para consistência
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
@@ -30,30 +30,31 @@ const styles = StyleSheet.create({
   },
   temaCard: {
     padding: 15,
-    marginVertical: 4, // Adicionado margin vertical para melhor espaçamento
+    marginVertical: 4,
     borderRadius: 8,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f0f0f0', // Fundo claro para o card
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#ccc', // Borda cinza suave
   },
   temaNome: {
     fontSize: 16,
     fontWeight: 'bold',
     flexShrink: 1,
     marginRight: 10,
+    color: '#333',
   },
   temaContagem: {
     fontSize: 14,
-    color: '#fa5f49',
+    color: '#4169E1', // Azul royal para a contagem, um destaque complementar
     fontWeight: 'bold',
   },
   button: {
-    backgroundColor: "#fa5f49",
+    backgroundColor: '#8A2BE2', // Roxo vibrante para o botão
     padding: 15,
-    borderRadius: 8,
+    borderRadius: 25, // Bordas arredondadas (consistente)
     alignItems: 'center',
     marginTop: 20,
     marginBottom: 10,
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   listContainer: {
-    height: 250, // Altura fixa para a lista de temas
+    height: 250,
     marginBottom: 15,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -77,8 +78,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   cardSelected: {
-    backgroundColor: '#59AC77',
-    borderColor: '#387c4f',
+    backgroundColor: '#4169E1', // Azul royal para o card selecionado
+    borderColor: '#1E90FF', // Tom de azul mais escuro para a borda
   },
   temaNomeSelected: {
     color: '#fff',

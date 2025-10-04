@@ -7,43 +7,43 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: "5%",
-    backgroundColor: "#add5fa",
+    backgroundColor: '#E6E6FA', // Fundo lilás claro (consistente)
   },
-  botao: {
+  botao: { // Para botões de ação principal (ex: Adicionar, Salvar)
     marginBottom: "2%",
     width: "80%",
     height: "6%",
-    borderRadius: 2,
+    borderRadius: 25, // Bordas arredondadas (consistente)
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fa5f49",
+    backgroundColor: '#8A2BE2', // Roxo vibrante (consistente)
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
   },
-  botaoLimpar: {
+  botaoLimpar: { // Para botões de ação secundária/positiva (ex: Limpar, Ver)
     width: "80%",
     marginBottom: "2%",
     height: "6%",
-    borderRadius: 2,
+    borderRadius: 25, // Bordas arredondadas (consistente)
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#59AC77",
+    backgroundColor: '#4169E1', // Azul Royal (consistente)
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
   },
-  botaoExcluirTudo: {
+  botaoExcluirTudo: { // Para botões de ação de perigo (ex: Excluir Tudo)
     width: "80%",
     height: "6%",
-    borderRadius: 2,
+    borderRadius: 25, // Bordas arredondadas (consistente)
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E45A92",
+    backgroundColor: '#DC143C', // Vermelho Crimson (consistente)
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   textoBotao: {
-    color: "#FFF",
+    color: "#FFF", // Texto branco (consistente)
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -60,19 +60,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 15,
     paddingHorizontal: 10,
+    width: '100%', // Garantir que ocupa a largura total para alinhamento
+    justifyContent: 'center', // Centralizar o conteúdo dentro da linha
   },
   caixaTexto: {
-    alignItems: "center",
+    // Alinhamento 'center' é geralmente para o texto *dentro* do input, não do próprio input
+    // height e width estão bons
     height: 40,
-    width: "85%",
-    borderColor: "black",
+    width: "85%", // Mantendo a proporção
+    borderColor: '#8A2BE2', // Borda com a cor roxa (consistente)
     borderWidth: 1,
     paddingHorizontal: 10,
     fontSize: 16,
+    borderRadius: 5, // Bordas levemente arredondadas (consistente)
   },
   listaTemas: {
-    width: "100%",
+    width: "100%", // Ocupar a largura total para o FlatList/ScrollView
+    // Adicione 'alignItems: 'center'' aqui se quiser centralizar os itens dentro da lista
   },
+  // Se tiver cards de tema, você adicionaria estilos como cardTema aqui
 });
 
 export default styles;

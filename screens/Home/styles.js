@@ -3,10 +3,10 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#5caae9ff', // Um lilás muito claro para o fundo, suave e inspirado no roxo da logo
+    backgroundColor: '#E6E6FA', // Um lilás muito claro para o fundo, suave e inspirado no roxo da logo
     gap: 20, 
   },
   logo: {

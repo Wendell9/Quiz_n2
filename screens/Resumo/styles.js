@@ -4,27 +4,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#add5fa",
+    backgroundColor: '#E6E6FA', // Fundo lilás claro
   },
-  header: {
-    paddingBottom: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  
+  // Estilo para o CARD DE RESUMO GERAL
+  header: { // Este é o card que resume os resultados gerais
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
     marginBottom: 20,
     alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#ddd', 
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 5,
+    color: '#483D8B',
+    marginBottom: 15,
+    textAlign: 'center',
   },
   summaryText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 4,
+    fontWeight: '600',
+    marginVertical: 6,
+    color: '#333',
   },
-  // Cards de Resultado
+  summaryAcerto: { // Cor para percentual alto
+    color: '#4169E1',
+  },
+  summaryErro: { // Cor para percentual baixo
+    color: '#DC143C',
+  },
+  percentualText: { // Estilo para o texto do percentual (tamanho, peso)
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  
+  // Estilos para os CARDS DE RESULTADO DE PERGUNTA INDIVIDUAL (ResultCard)
   resultCard: {
     backgroundColor: '#fff',
     borderRadius: 10,
@@ -35,38 +58,46 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
-    borderLeftWidth: 5,
+    borderLeftWidth: 5, // Borda lateral para indicar acerto/erro
   },
-  // Cores condicionais
   acerto: {
-    borderLeftColor: '#59AC77', // Verde (Acerto)
+    borderLeftColor: '#4169E1', // Azul royal para acerto
   },
   erro: {
-    borderLeftColor: '#fa5f49', // Vermelho (Erro)
+    borderLeftColor: '#DC143C', // Vermelho crimson para erro
   },
   questionText: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
+    color: '#333',
   },
   answerText: {
     fontSize: 14,
     marginTop: 2,
+    color: '#666',
   },
   correctAnswer: {
-    color: '#59AC77',
+    color: '#4169E1',
     fontWeight: 'bold',
     marginTop: 5,
   },
   userAnswer: {
-    color: '#fa5f49',
+    color: '#DC143C',
   },
+
+  // Estilos para o BOTÃO FINAL
   button: {
-    backgroundColor: "#fa5f49",
+    backgroundColor: '#8A2BE2',
     padding: 15,
-    borderRadius: 8,
+    borderRadius: 25,
     alignItems: 'center',
     marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   buttonText: {
     color: '#fff',

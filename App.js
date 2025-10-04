@@ -56,13 +56,14 @@ export default function App() {
         initialRouteName="Home"
         screenOptions={{
           headerStyle: {
-            backgroundColor: "#483D8B", // Fundo do cabeçalho
+            backgroundColor: "#483D8B", 
           },
-          headerTintColor: "#fff", // Cor do texto do cabeçalho
+          headerTintColor: "#fff", 
           headerTitleStyle: {
             fontWeight: "bold",
             fontSize: 20,
           },
+          headerTitleAlign: 'center',
         }}
       >
         <Stack.Screen
