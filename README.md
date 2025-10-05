@@ -18,27 +18,6 @@ Este projeto é um aplicativo de quiz mobile desenvolvido em React Native. Ele p
 - `screens/`: Telas do aplicativo (Home, Jogo, Pergunta, Resumo, etc.)
 - `services/`: Serviços, como acesso ao banco de dados (`dbservice.js`)
 
-### Telas do Aplicativo
-
-Aqui estão algumas telas para você ter uma ideia de como o app funciona:
-
-- **Tela Inicial:**
-![Tela Inicial](/Prints%20das%20Telas%20do%20Projeto/{D1E666CC-C30B-4DD8-B9CA-B6846EBF9417}.png)
-
-- **Temas:**
-![Temas](/Prints%20das%20Telas%20do%20Projeto/{FD5A4B9E-2C92-4D2C-9582-816EBCA9008F}.png)
-
-- **Perguntas:**
-![Perguntas](/Prints%20das%20Telas%20do%20Projeto/{314E6247-18DA-4885-A842-D5F8D5CE7EB7}.png)
-
-- **Seleção de Temas:**
-![Seleção de Temas](/Prints%20das%20Telas%20do%20Projeto/{CE310963-C742-404E-B694-AA231CC78920}.png)
-
-- **Tela de Jogos:**
-![Tela de Jogos](/Prints%20das%20Telas%20do%20Projeto/{ADDAB4B0-A11F-4F01-A484-E0B0D2600606}.png)
-
-- **Resumo dos Acertos:**
-![Resumo dos Acertos](/Prints%20das%20Telas%20do%20Projeto/{62B974D6-FBCE-4769-AA73-100B54564312}.png)
 ## Instalação
 1. Clone o repositório:
    ```bash
