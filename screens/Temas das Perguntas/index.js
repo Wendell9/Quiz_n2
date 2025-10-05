@@ -1,16 +1,14 @@
 import styles from "./styles";
 import {
   Alert,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
   Keyboard,
   ScrollView,
+  Image,
 } from "react-native";
 import { useState, useEffect } from "react";
 import * as DbService from "../../services/dbservice";
-import CardTema from "../../Componentes/CardTema";
+import CardTemaPergunta from "../../Componentes/CardTemaPergunta";
 import { useNavigation } from "@react-navigation/native";
 
 export default function TemaScreen() {
@@ -162,43 +160,13 @@ export default function TemaScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.areaNome}>
-        <TextInput
-          style={styles.caixaTexto}
-          onChangeText={(texto) => setNomeTema(texto)}
-          value={nomeTema}
-          placeholder="Nome"
-        />
-      </View>
-      <TouchableOpacity
-        style={styles.botao}
-        onPress={async () => {
-          await salvarTema();
-        }}
-      >
-        <Text style={styles.textoBotao}>Salvar Tema</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.botaoLimpar}
-        onPress={() => limparCampos()}
-      >
-        <Text style={styles.textoBotao}>Limpar</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.botaoExcluirTudo}
-        onPress={async () => await apagarTudo()}
-      >
-        <Text style={styles.textoBotao}>Excluir Temas</Text>
-      </TouchableOpacity>
-
-      <ScrollView contentContainerStyle={styles.listaTemas}>
+      <ScrollView style={styles.listaTemas}
+      contentContainerStyle={styles.listaTemasContent}>
         {temas.map((tema, index) => (
-          <CardTema
+          <CardTemaPergunta
             tema={tema}
             key={index.toString()}
-            removerElemento={removerElemento}
-            editar={editar}
+            irParaPerguntas={irParaPerguntas}
           />
         ))}
       </ScrollView>

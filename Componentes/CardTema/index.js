@@ -5,9 +5,9 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo'; 
 import styles from './styles';
 
-export default function CardTema({ tema, removerElemento, editar, irParaPerguntas }) {
+export default function CardTema({ tema, removerElemento, editar }) {
     return (
-        <TouchableOpacity style={styles.card} onPress={() => irParaPerguntas(tema)}>
+        <View style={styles.card}>
 
             <Text style={styles.listaNome}> {tema.nome}</Text>
 
@@ -21,7 +21,7 @@ export default function CardTema({ tema, removerElemento, editar, irParaPergunta
                 </TouchableOpacity>
 
             </View>
-        </TouchableOpacity>
+        </View>
     );
 
 };

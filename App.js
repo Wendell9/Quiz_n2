@@ -7,6 +7,7 @@ import Pergunta from "./screens/Pergunta";
 import TelaSelecao from "./screens/TelaSelecao/index";
 import JogoScreen from "./screens/Jogo/index";
 import ResumoScreen from "./screens/Resumo/index";
+import TemasdasPerguntas from "./screens/Temas das Perguntas/index";
 import * as DbService from "./services/dbservice";
 import React, { useState, useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
@@ -80,6 +81,11 @@ export default function App() {
           name="Temas"
           component={TemaScreen}
           options={{ title: "Temas" }}
+        />
+        <Stack.Screen
+          name="Temas das Perguntas"
+          component={TemasdasPerguntas}
+          options={{ title: "Escolha o tema da Pergunta" }}
         />
         <Stack.Screen
           name="Perguntas"
