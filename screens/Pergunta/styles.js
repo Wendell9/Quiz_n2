@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical:"5%",
-    backgroundColor: "#add5fa",
+    backgroundColor: "#E6E6FA",
   },
   label: {
     fontSize: 16,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#59AC77',
   },
   button: {
-    backgroundColor: "#fa5f49",
+    backgroundColor: "#8A2BE2",
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
