@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
   Alert,
 } from "react-native";
@@ -15,10 +14,9 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function Pergunta() {
   const navigation = useNavigation();
-  // Estado para a pergunta principal
   const [pergunta, setPergunta] = useState("");
   const route = useRoute();
-  const { temaId, perguntaId } = route.params; // Lê o parâmetro 'temaId'
+  const { temaId, perguntaId } = route.params; 
 
   useEffect(() => {
     if (perguntaId) {
@@ -40,7 +38,6 @@ export default function Pergunta() {
     }
   }
 
-  // Estado para as quatro alternativas. 'isCorrect' é booleano para a resposta correta.
   const [alternativas, setAlternativas] = useState([
     { id: "A", text: "", isCorrect: false },
     { id: "B", text: "", isCorrect: false },
@@ -48,7 +45,6 @@ export default function Pergunta() {
     { id: "D", text: "", isCorrect: false },
   ]);
 
-  // Função para atualizar o texto de uma alternativa
   const handleAlternativeChange = (text, id) => {
     const novasAlternativas = alternativas.map((alt) =>
       alt.id === id ? { ...alt, text: text } : alt
@@ -56,26 +52,22 @@ export default function Pergunta() {
     setAlternativas(novasAlternativas);
   };
 
-  // Função para selecionar a alternativa correta
   const handleCorrectAlternative = (id) => {
     const novasAlternativas = alternativas.map(
       (alt) =>
         alt.id === id
-          ? { ...alt, isCorrect: true } // Marca esta como correta
-          : { ...alt, isCorrect: false } // Desmarca as outras
+          ? { ...alt, isCorrect: true } 
+          : { ...alt, isCorrect: false } 
     );
     setAlternativas(novasAlternativas);
   };
 
   function temAlternativasDuplicadas(alternativas) {
-    // 1. Pega apenas o texto de cada alternativa
+
     const textos = alternativas.map((alt) => alt.text.toLowerCase().trim());
 
-    // 2. Cria um Set com esses textos. O Set remove duplicatas automaticamente.
     const textosUnicos = new Set(textos);
 
-    // 3. Compara o tamanho do Set com o número total de alternativas.
-    // Se os tamanhos forem diferentes, há duplicatas.
     return textosUnicos.size !== alternativas.length;
   }
 
@@ -137,10 +129,9 @@ export default function Pergunta() {
 
       let resultado;
 
-      // Verifica se o perguntaId foi passado. Se sim, é uma edição.
       if (perguntaId !== undefined) {
         console.log("Modo de Edição: Chamando atualizaPergunta.");
-        // Você precisará criar essa função na próxima etapa
+
         resultado = await DbService.atualizaPergunta(
           perguntaId,
           dadosPergunta,
@@ -179,15 +170,15 @@ export default function Pergunta() {
       <Text style={styles.label}>Escreva as alternativas:</Text>
       {alternativas.map((alternativa) => (
         <View key={alternativa.id} style={styles.alternativaContainer}>
-          {/* Botão de seleção da alternativa correta */}
+          
           <TouchableOpacity
             style={[
               styles.circle,
-              alternativa.isCorrect && styles.circleFilled, // Aplica estilo se for a correta
+              alternativa.isCorrect && styles.circleFilled, 
             ]}
             onPress={() => handleCorrectAlternative(alternativa.id)}
           />
-          {/* Input para o texto da alternativa */}
+
           <TextInput
             style={styles.inputAlternativa}
             value={alternativa.text}
@@ -201,7 +192,6 @@ export default function Pergunta() {
         </View>
       ))}
 
-      {/* Exemplo de como você pode pegar os dados para salvar */}
       <TouchableOpacity
         style={styles.button}
         onPress={async () => await SalvarPergunta()}
